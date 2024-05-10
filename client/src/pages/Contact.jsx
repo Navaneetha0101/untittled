@@ -1,12 +1,26 @@
 import { NavLink } from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "../store/auth";
+import { baseUrl } from "../url";
 const Contact = ()=> {
-  const [contact, setContact] = useState({
+  const defaultContactData = {
     emailid:"",
     username:"",
     message:"",
-  });
+  }
+  const [contact, setContact] = useState(defaultContactData);
   
+  const [userData, setUserData] = useState(true);
+  const { user } = useAuth();
+  if(userData && user){
+    setContact({
+      username: user.username,
+      emailid: user.emailid,
+      message:"",
+    })
+    setUserData(false);
+  }
+ 
   const handleInput = (e) =>{
     console.log(e);
     let name = e.target.name;
@@ -17,9 +31,33 @@ const Contact = ()=> {
      [name]: value,
     });
 }
-const handleSubmit = (e)=>{
+const URL = `${baseUrl}/form/contact`
+const handleSubmit = async(e)=>{
   e.preventDefault();
-  console.log(contact);
+  try{
+    const response = await fetch(URL,{
+      method:"POST",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(contact),
+    });
+    console.log("feedback",response);
+    if(response.ok){
+      
+      setContact(defaultContactData);
+      const data = await response.json();
+      console.log(data);
+      alert("Message sent successfully");
+    }else{
+      alert("invalid");
+      console.log("invalid credentials");
+    }
+  }
+  catch(error){
+    console.log(error);
+  }
+
 }
     return (
       <main>
@@ -43,7 +81,7 @@ const handleSubmit = (e)=>{
                       id="username" value={contact.username} onChange={handleInput} className="text-black w-2/3 h-12 rounded-sm" required />
                     </div>
                     <div className="flex justify-between my-5">
-                      <label htmlFor="message" className="mt-2">message</label>
+                      <label htmlFor="message" className="mt-2">Feedback</label>
                       <textarea cols="30" rows="10"  name="message" placeholder="" autoComplete="off"
                       id="message" value={contact.message} onChange={handleInput} className="text-black w-2/3 h-24 rounded-sm" required />
                     </div>

@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar"
 import { Error } from "./pages/Error"
 import { Footer } from "./components/Footer"
 import { Logout } from "./pages/Logout"
+import { Userprofile } from "./pages/Userprofile"
 const App = () =>{
 
 
@@ -26,6 +27,7 @@ const App = () =>{
            <Route path="/login" element={<Login />}/>
            <Route path="/collection" element={<Collection />} />
            <Route path="/logout" element={<Logout />} />
+           <Route path="/userprofile" element={<Userprofile />} />
            <Route path="*" element={<Error />} />
        </Routes>
      </div>
