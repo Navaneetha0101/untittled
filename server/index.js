@@ -8,7 +8,7 @@ const connectDb = require("./utility/db");
 const errorMiddleware = require("./middlewares/error-middleware");
 
 const corsOptions = {
-    origin:"http://localhost:5174",
+    origin:["http://localhost:5174","https://untittled-one.vercel.app/"],
     methods:"GET, POST, PUT, DELETE, PATCH, HEAD",
     credentials:true,
 };
